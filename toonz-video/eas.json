@@ -1,0 +1,39 @@
+{
+  "cli": {
+    "version": ">= 16.0.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://YOUR-TOONZ-SERVER.example.com",
+        "EXPO_PUBLIC_REVENUECAT_IOS_KEY": "appl_REPLACE_ME",
+        "EXPO_PUBLIC_REVENUECAT_ANDROID_KEY": "goog_REPLACE_ME"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://YOUR-TOONZ-SERVER.example.com",
+        "EXPO_PUBLIC_REVENUECAT_IOS_KEY": "appl_REPLACE_ME",
+        "EXPO_PUBLIC_REVENUECAT_ANDROID_KEY": "goog_REPLACE_ME"
+      }
+    },
+    "production": {
+      "autoIncrement": true,
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://YOUR-TOONZ-SERVER.example.com",
+        "EXPO_PUBLIC_REVENUECAT_IOS_KEY": "appl_REPLACE_ME",
+        "EXPO_PUBLIC_REVENUECAT_ANDROID_KEY": "goog_REPLACE_ME"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
