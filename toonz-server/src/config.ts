@@ -32,6 +32,9 @@ export const config = {
   // Without a fal key we can't make real media, so the whole pipeline runs on local placeholders.
   mock: env("MOCK") === "1" || falKey === "",
 
+  supportEmail: env("SUPPORT_EMAIL"),
+  legalUpdated: env("LEGAL_UPDATED", "October 13, 2026"),
+
   freeCredits: intEnv("FREE_CREDITS", 1),
   revenueCatWebhookAuth: env("REVENUECAT_WEBHOOK_AUTH"),
   creditProducts: parseProducts(env("CREDIT_PRODUCTS", "toonz_credits_5=5,toonz_credits_20=20")),

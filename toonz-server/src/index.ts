@@ -7,6 +7,7 @@ import { config } from "./config.js";
 import {
   createDevice,
   createVideo,
+  deleteDevice,
   findDeviceByToken,
   getDevice,
   getVideo,
@@ -19,6 +20,7 @@ import {
   type VideoRow,
 } from "./db.js";
 import { findLanguage, LANGUAGES } from "./languages.js";
+import { privacyPolicyHtml, termsHtml } from "./legal.js";
 import { enqueue, recoverInterruptedJobs, videoFilePath, videosDir } from "./pipeline.js";
 
 const app = Fastify({ logger: true, trustProxy: true });
@@ -52,6 +54,9 @@ function serializeVideo(v: VideoRow) {
 
 app.get("/health", async () => ({ ok: true, mock: config.mock }));
 
+app.get("/privacy", async (_request, reply) => reply.type("text/html").send(privacyPolicyHtml()));
+app.get("/terms", async (_request, reply) => reply.type("text/html").send(termsHtml()));
+
 app.get("/v1/languages", async () => ({ languages: LANGUAGES }));
 
 app.post("/v1/devices", { config: { rateLimit: { max: 5, timeWindow: "1 hour" } } }, async () => {
@@ -63,6 +68,13 @@ app.get("/v1/me", async (request, reply) => {
   const device = authenticate(request, reply);
   if (!device) return reply;
   return { id: device.id, credits: device.credits, creditProducts: Object.fromEntries(config.creditProducts) };
+});
+
+app.delete("/v1/me", async (request, reply) => {
+  const device = authenticate(request, reply);
+  if (!device) return reply;
+  for (const id of deleteDevice(device.id)) fs.rmSync(videoFilePath(id), { force: true });
+  return { ok: true };
 });
 
 const CreateVideoBody = z.object({

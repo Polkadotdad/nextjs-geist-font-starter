@@ -163,3 +163,11 @@ export function listUnfinishedVideos(): VideoRow[] {
     .prepare(`SELECT ${VIDEO_COLUMNS} FROM videos WHERE status IN ('queued', 'running')`)
     .all() as unknown as VideoRow[];
 }
+
+/** Removes the device and everything it made. Returns the ids of its videos so their files can be deleted. */
+export function deleteDevice(deviceId: string): string[] {
+  const ids = (db.prepare("SELECT id FROM videos WHERE device_id = ?").all(deviceId) as { id: string }[]).map((r) => r.id);
+  db.prepare("DELETE FROM videos WHERE device_id = ?").run(deviceId);
+  db.prepare("DELETE FROM devices WHERE id = ?").run(deviceId);
+  return ids;
+}
